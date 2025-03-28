@@ -1,0 +1,376 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 85px;
+  display: flex;
+  overflow-x: hidden;
+  flex-direction: column;
+  background: #253428;
+  padding: 25px 20px;
+  transition: all 0.4s ease;
+  z-index: 999;
+}
+
+.sidebar:hover {
+  width: 260px;
+}
+
+.sidebar .sidebar-header {
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.sidebar .sidebar-header img {
+  width: 48px;
+  border-radius: 50%;
+}
+
+.sidebar .sidebar-header h2 {
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 600;
+  white-space: nowrap;
+  margin-left: 23px;
+}
+
+.sidebar .sidebar-header .admin-email {
+  color: #fff;
+  font-size: 12px;
+  white-space: nowrap;
+  position: relative;
+  margin-left: 23px;
+}
+
+.sidebar-links h4 {
+  color: #86bb91;
+  font-weight: 500;
+  white-space: nowrap;
+  margin: 10px 0;
+  position: relative;
+}
+
+.sidebar-links h4 span {
+  opacity: 0;
+}
+
+.sidebar:hover .sidebar-links h4 span {
+  opacity: 1;
+}
+
+.sidebar-links .menu-separator {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  transform: scaleX(1);
+  transform: translateY(-50%);
+  background: #fff;
+  transform-origin: right;
+  transition-delay: 0.2s;
+}
+
+.sidebar:hover .sidebar-links .menu-separator {
+  transition-delay: 0s;
+  transform: scaleX(0);
+}
+
+.sidebar-links {
+  list-style: none;
+  margin-top: 20px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.sidebar-links::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar-links li a {
+  display: flex;
+  align-items: center;
+  gap: 0 20px;
+  color: #fff;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 15px 10px;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.sidebar-links li a:hover {
+  color: #073b4c;
+  background: #fff;
+  border-radius: 4px;
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+  width: 100%;
+  height: 64px;
+  border: 1px #c3c3c3 solid;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.breadcrumbs .left {
+  display: flex;
+  align-items: center;
+}
+.breadcrumbs .left p {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumbs .left span {
+  color: #6a994e;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.breadcrumbs .right {
+  gap: 2rem;
+  font-size: 20px;
+}
+
+.breadcrumbs .right a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #333;
+}
+
+.breadcrumbs .right a span {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Dashboard Section */
+.dashboard-analytics-container-top {
+  padding: 2rem;
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  max-height: 500px;
+}
+
+.dashboard-header {
+  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  flex: 1 1 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.admin-greetings {
+  border-bottom: 1px solid #aaa;
+  padding: 0 0 1rem 0;
+  margin: 0 0 2rem 0;
+}
+
+.admin-greetings p {
+  color: #555;
+}
+
+.admin-greetings h1 {
+  color: #333;
+}
+
+.admin-greetings h1 span {
+  color: #6a994e;
+}
+
+.recent-activities h3 {
+  color: #333;
+}
+
+.recent-activities {
+  max-height: 350px;
+}
+
+.activities-container {
+  max-height: 200px;
+  overflow: scroll;
+  padding-right: 15px;
+  scrollbar-width: 0.5px;
+  scroll-behavior: smooth;
+  scrollbar-color: #6a994e #fff;
+}
+
+.activity:nth-child(1) {
+  margin-top: 0;
+}
+
+.activity {
+  display: flex;
+  align-items: center;
+  margin: 1.6rem 0;
+  justify-content: space-between;
+}
+
+.activity .activity-name {
+  align-items: center;
+  display: flex;
+  gap: 0.6rem;
+}
+
+.dashboard-adoption-data {
+  flex: 1 0 0;
+}
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.8rem;
+}
+
+.dashboard-cards .card {
+  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
+  padding: 1.6rem 2rem;
+  border-radius: 10px;
+}
+.dashboard-cards .card .top {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 15px;
+}
+
+.dashboard-cards .card span {
+  font-size: 46px;
+  color: #6a994e;
+}
+
+.dashboard-cards .card .number {
+  font-size: 32px;
+  font-weight: 500;
+}
+
+.dashboard-cards .card .month {
+  color: #555;
+  font-size: 14px;
+}
+
+.view-more-btn {
+  padding: 15px 20px;
+  width: 100%;
+  grid-column: 1/3;
+  border: none;
+  font-weight: 500;
+  background-color: #6a994e;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.view-more-btn:hover {
+  background-color: #54793e;
+}
+
+.dashboard-analytics-container-bottom {
+  padding: 0 2rem;
+}
+
+/* Login Section */
+.login-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.login-container {
+  display: flex;
+  gap: 2rem;
+  max-height: 600px;
+  width: 850px;
+  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.left-panel input {
+  padding: 15px 20px;
+  background-color: #eee;
+  border: none;
+  margin-bottom: 1rem;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.left-panel img {
+  width: 128px;
+}
+
+.login-form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.login-form a {
+  align-self: flex-end;
+  margin-bottom: 2rem;
+}
+
+.login-form .submit-btn {
+  padding: 15px 20px;
+  width: 100%;
+  border: none;
+  font-weight: 500;
+  background-color: #6a994e;
+  color: #fff;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.submit-btn:hover {
+  background-color: #54793e;
+}
+
+.left-panel a {
+  justify-self: flex-end;
+  text-decoration: none;
+  color: #555;
+}
+
+.right-panel {
+  overflow: hidden;
+}
+
+.right-panel img {
+  height: 100%;
+}
