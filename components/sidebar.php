@@ -27,10 +27,6 @@
                 </span>Staffs</a>
         </li>
         <li>
-            <a href="../tabs/staff-admins-management.php"><span class="material-symbols-outlined"> shield_person
-                </span>Staff-Admins</a>
-        </li>
-        <li>
             <a href="../tabs/shelters-management.php"><span class="material-symbols-outlined"> map </span>Shelters</a>
         </li>
         <li>

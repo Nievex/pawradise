@@ -2,7 +2,7 @@
 include '../components/db_connect.php';
 include '../components/popup.php';
 
-$query = "SELECT * FROM users_table"; 
+$query = "SELECT * FROM users"; 
 $result = mysqli_query($conn, $query);
 
 if (!$result) {
@@ -86,7 +86,6 @@ if (isset($_GET['deleted']) && $_GET['deleted'] == 1) {
                     <?php
                     if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        // Convert image blob to base64
                         $imageData = base64_encode($row['user_img']);
                         $imageSrc = 'data:image/jpeg;base64,' . $imageData;
 
@@ -97,7 +96,7 @@ if (isset($_GET['deleted']) && $_GET['deleted'] == 1) {
                         echo "<td>{$row['fullname']}</td>";
                         echo "<td>{$row['bio']}</td>";
                         echo "<td>{$row['email']}</td>";
-                        echo "<td>{$row['phone']}</td>"; // You can show actual number if desired
+                        echo "<td>{$row['phone']}</td>";
                         echo "<td>{$row['address']}</td>";
                         echo "<td>{$row['created_at']}</td>";
                         echo "<td class='options-btn'>

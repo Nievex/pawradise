@@ -1,7 +1,7 @@
 <?php
-ini_set('session.cookie_secure', '1');         // Only over HTTPS
-ini_set('session.cookie_httponly', '1');       // JS can't access cookies
-ini_set('session.cookie_samesite', 'Strict');  // Prevent CSRF
+ini_set('session.cookie_secure', '1');
+ini_set('session.cookie_httponly', '1');
+ini_set('session.cookie_samesite', 'Strict');
 
 session_start();
 include './components/db_connect.php';
@@ -10,35 +10,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $email = $_POST['email'];
   $password = $_POST['password'];
 
-  $stmt = $conn->prepare("SELECT * FROM admin_table WHERE email = ? AND password = ?");
+  $stmt = $conn->prepare("SELECT * FROM admins WHERE email = ? AND password = ?");
   $stmt->bind_param("ss", $email, $password);
   $stmt->execute();
   $result = $stmt->get_result();
 
   if ($result->num_rows == 1) {
-    session_regenerate_id(true); // Prevent session fixation
+    session_regenerate_id(true);
     $session_id = session_id();
     $now = date('Y-m-d H:i:s');
 
-    // Check for existing session
     $check = $conn->prepare("SELECT session_id FROM admin_sessions WHERE admin_email = ?");
     $check->bind_param("s", $email);
     $check->execute();
     $existing = $check->get_result()->fetch_assoc();
 
     if ($existing && $existing['session_id'] !== $session_id) {
-        // Optionally invalidate previous session
         echo "<script>alert('You are already logged in on another device.'); window.location='login.php';</script>";
         exit();
     }
 
-    // Update or insert session info
     $update = $conn->prepare("REPLACE INTO admin_sessions (admin_email, session_id, last_activity) VALUES (?, ?, ?)");
     $update->bind_param("sss", $email, $session_id, $now);
     $update->execute();
 
     $_SESSION['admin_email'] = $email;
-    $_SESSION['LAST_ACTIVITY'] = time(); // Store last activity
+    $_SESSION['LAST_ACTIVITY'] = time();
 
     header("Location: ./tabs/dashboard.php");
     exit();

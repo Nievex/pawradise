@@ -1,7 +1,7 @@
 <?php
 include('../components/db_connect.php');
 
-$query = "SELECT * FROM users_table"; 
+$query = "SELECT * FROM shelters"; 
 $result = mysqli_query($conn, $query);
 
 if (!$result) {

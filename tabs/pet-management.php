@@ -94,9 +94,7 @@ if (isset($_GET['deleted']) && $_GET['deleted'] == 1) {
                     </tr>
 
                     <?php
-                    // Loop through the results and display them in the table
                     while ($row = mysqli_fetch_assoc($result)) {
-                        // Fetch the image BLOB and convert to Base64
                         $imageData = base64_encode($row['pet_img']); // Assuming 'image' is the BLOB column
                         $imageSrc = 'data:image/jpeg;base64,' . $imageData; // You can change the MIME type if necessary
 
@@ -156,6 +154,5 @@ if (isset($_GET['deleted']) && $_GET['deleted'] == 1) {
 </html>
 
 <?php
-// Close the database connection
 mysqli_close($conn);
 ?>

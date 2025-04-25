@@ -1,7 +1,5 @@
 <?php
 session_start();
-
-// 15-minute timeout
 $timeout_duration = 9000;
 
 if (!isset($_SESSION['admin_email'])) {
@@ -26,7 +24,7 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) >
 $_SESSION['LAST_ACTIVITY'] = time();
 
 include '../components/db_connect.php';
-$result = $conn->query("SELECT * FROM staffs_table");
+$result = $conn->query("SELECT * FROM staffs");
 ?>
 
 <!DOCTYPE html>
@@ -87,7 +85,7 @@ $result = $conn->query("SELECT * FROM staffs_table");
                         <th>PHONE</th>
                         <th>ROLE</th>
                         <th>SHELTER</th>
-                        <th>LOCATION</th>
+                        <th>ADDRESS</th>
                         <th>CREATED</th>
                         <th></th>
                     </tr>
@@ -100,7 +98,7 @@ $result = $conn->query("SELECT * FROM staffs_table");
                         <td><?= htmlspecialchars($row['phone']) ?></td>
                         <td><?= htmlspecialchars($row['role']) ?></td>
                         <td><?= htmlspecialchars($row['shelter']) ?></td>
-                        <td><?= htmlspecialchars($row['location']) ?></td>
+                        <td><?= htmlspecialchars($row['address']) ?></td>
                         <td><?= htmlspecialchars($row['created_at']) ?></td>
                         <td class="options-btn">
                             <span class="material-symbols-outlined">edit</span>
