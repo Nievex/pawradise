@@ -318,15 +318,6 @@
   flex-grow: 1;
 }
 
-.pet-management-bottom-panel .right-panel .input-division {
-  align-self: flex-start;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 1.2rem;
-  width: 100%;
-  margin: 1rem 0 3rem 0;
-}
-
 .pet-management-bottom-panel .right-panel input[type="text"],
 .pet-management-bottom-panel .right-panel input[type="number"],
 .pet-management-bottom-panel .right-panel select {
@@ -392,6 +383,10 @@
   padding-right: 1rem;
 }
 
+.user-mgmt-bottom-panel .user-mgmt-left-panel img {
+  margin-bottom: 1rem;
+}
+
 .user-mgmt-bottom-panel .user-mgmt-left-panel .photo-gallery {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -407,15 +402,6 @@
 .user-mgmt-bottom-panel .right-panel {
   align-self: flex-start;
   flex-grow: 1;
-}
-
-.user-mgmt-bottom-panel .right-panel .input-division {
-  align-self: flex-start;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 1.2rem;
-  width: 100%;
-  margin-bottom: 3rem;
 }
 
 .user-mgmt-bottom-panel .right-panel input[type="text"],

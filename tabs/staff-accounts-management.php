@@ -1,25 +1,31 @@
 <?php
 include '../components/db_connect.php';
 include '../components/session.php';
+include '../components/popup.php';
 
-if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
-    include '../components/db_connect.php';
-    $email = $_SESSION['admin_email'];
-    $stmt = $conn->prepare("DELETE FROM admin_sessions WHERE admin_email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->close();
-
-    session_unset();
-    session_destroy();
-    header("Location: ../login.php?timeout=1");
+if (!isset($_SESSION['admin_email'])) {
+    header("Location: ../login.php");
     exit();
 }
 
-$_SESSION['LAST_ACTIVITY'] = time();
-
-include '../components/db_connect.php';
 $result = $conn->query("SELECT * FROM staffs");
+
+if (!$result) {
+    die("Database query failed: " . $conn->error);
+}
+
+if (isset($_GET['deleted']) && $_GET['deleted'] == 1) {
+    displayPopup("Staff deleted successfully.");
+} elseif (isset($_GET['error']) && $_GET['error'] == 1) {
+    displayPopup("Something went wrong. Please try again.", 'error');
+}
+
+$staffs_table = [];
+while ($row = $result->fetch_assoc()) {
+    $staffs_table[] = $row;
+}
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -55,13 +61,13 @@ $result = $conn->query("SELECT * FROM staffs");
                 <div class="header">
                     <h1>Staffs Management</h1>
                     <p class="subtitle">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Manage staff roles,
                     </p>
                 </div>
                 <div class="top-buttons">
                     <a href="../components/pending-staffs.html" class="pending-btn"><span
                             class="material-symbols-outlined">schedule</span>Pending</a>
-                    <a href="../components/add-pet.html" class="add-btn"><span
+                    <a href="../components/add-staff.php" class="add-btn"><span
                             class="material-symbols-outlined">add</span>Add Staff</a>
 
                 </div>
@@ -76,6 +82,7 @@ $result = $conn->query("SELECT * FROM staffs");
                 <table class="general-table">
                     <tr>
                         <th>ID</th>
+                        <th>IMAGE</th>
                         <th>NAME</th>
                         <th>EMAIL</th>
                         <th>PHONE</th>
@@ -85,38 +92,62 @@ $result = $conn->query("SELECT * FROM staffs");
                         <th>CREATED</th>
                         <th></th>
                     </tr>
-                    <?php if ($result && $result->num_rows > 0): ?>
-                    <?php while ($row = $result->fetch_assoc()): ?>
-                    <tr>
-                        <td><?= $row['id'] ?></td>
-                        <td><?= htmlspecialchars($row['name']) ?></td>
-                        <td><?= htmlspecialchars($row['email']) ?></td>
-                        <td><?= htmlspecialchars($row['phone']) ?></td>
-                        <td><?= htmlspecialchars($row['role']) ?></td>
-                        <td><?= htmlspecialchars($row['shelter']) ?></td>
-                        <td><?= htmlspecialchars($row['address']) ?></td>
-                        <td><?= htmlspecialchars($row['created_at']) ?></td>
-                        <td class="options-btn">
-                            <span class="material-symbols-outlined">edit</span>
-                            <div class="pop-up">
-                                <a href="edit-staff.php?id=<?= $row['id'] ?>"><span
-                                        class="material-symbols-outlined">edit</span>Edit</a>
-                                <a href="delete-staff.php?id=<?= $row['id'] ?>"
-                                    onclick="return confirm('Are you sure you want to delete this staff?')">
-                                    <span class="material-symbols-outlined">delete</span>Delete</a>
-                            </div>
-                        </td>
-                    </tr>
-                    <?php endwhile; ?>
+
+                    <?php
+                    if (count($staffs_table) > 0):
+                        foreach($staffs_table as $row):
+                        $imageSrc = !empty($row['user_img']) ? 'data:image/jpeg;base64,' . base64_encode($row['user_img']) : './images/default.png';
+                        
+                        echo "<tr>";
+                        echo "<td>".$row['id']."</td>";
+                        echo "<td><img src='{$imageSrc}' alt='User Image' width='50' /></td>";
+                        echo "<td>".$row['fullname']."</td>";
+                        echo "<td>".$row['email']."</td>";
+                        echo "<td>".$row['phone']."</td>";
+                        echo "<td>".$row['role']."</td>";
+                        echo "<td>".$row['shelter']."</td>";
+                        echo "<td class='text-overflow'>".$row['address']."</td>";
+                        echo "<td>".$row['created_at']."</td>";
+                        echo "<td class='options-btn'>
+                                <span class='material-symbols-outlined'>edit</span>
+                                <div class='pop-up'>
+                                    <a href='../components/edit-staff.php?user_id={$row['id']}'><span class='material-symbols-outlined'>edit</span>Edit</a>
+                                    <form action='../components/delete-staff.php' method='POST' onsubmit='return confirm(\"Are you sure you want to delete this user?\");'>
+                                        <input type='hidden' name='user_id' value='{$row['id']}'>
+                                        <button type='submit' class='delete-btn'>
+                                            <span class='material-symbols-outlined'>delete</span>Delete
+                                        </button>
+                                    </form>
+                                </div>
+                              </td>";
+                        echo "</tr>";                        
+                    endforeach;
+                    ?>
                     <?php else: ?>
-                    <tr>
-                        <td colspan="8" style="text-align:center;">No staff records found.</td>
-                    </tr>
+                    <p>No available data</p>
                     <?php endif; ?>
                 </table>
             </div>
         </div>
     </section>
+
+    <script>
+    function closePopup() {
+        const popup = document.querySelector(".popup-overlay");
+        if (popup) {
+            popup.classList.remove("show");
+        }
+    }
+
+    window.addEventListener("load", function() {
+        const popup = document.querySelector(".popup-overlay");
+        if (popup) {
+            setTimeout(() => {
+                closePopup();
+            }, 3000);
+        }
+    });
+    </script>
 </body>
 
 </html>

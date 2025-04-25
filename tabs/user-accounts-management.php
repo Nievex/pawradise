@@ -62,7 +62,7 @@ $conn->close();
                 <div class="header">
                     <h1>User Accounts Management</h1>
                     <p class="subtitle">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Create, edit, and delete user information
                     </p>
                 </div>
                 <div class="top-buttons">
@@ -92,6 +92,8 @@ $conn->close();
                         <th>EMAIL</th>
                         <th>PHONE</th>
                         <th>ADDRESS</th>
+                        <th>GENDER</th>
+                        <th>BIRTHDATE</th>
                         <th>CREATED</th>
                         <th></th>
                     </tr>
@@ -99,23 +101,24 @@ $conn->close();
                     <?php
                     if (count($users_table) > 0):
                         foreach($users_table as $row):
-                        $imageData = base64_encode($row['user_img']);
-                        $imageSrc = 'data:image/jpeg;base64,' . $imageData;
+                        $imageSrc = !empty($row['user_img']) ? 'data:image/jpeg;base64,' . base64_encode($row['user_img']) : './images/default.png';
 
                         echo "<tr>";
                         echo "<td>".$row['user_id']."</td>";
-                        echo "<td><img src='{".$imageSrc."}' alt='User Image' width='50' /></td>";
+                        echo "<td><img src='{$imageSrc}' alt='User Image' width='50' /></td>";
                         echo "<td>".$row['username']."</td>";
                         echo "<td>".$row['fullname']."</td>";
                         echo "<td>".$row['bio']."</td>";
                         echo "<td>".$row['email']."</td>";
                         echo "<td>".$row['phone']."</td>";
-                        echo "<td>".$row['address']."</td>";
+                        echo "<td class='text-overflow'>".$row['address']."</td>";
+                        echo "<td>".$row['gender']."</td>";
+                        echo "<td>".$row['birthdate']."</td>";
                         echo "<td>".$row['created_at']."</td>";
                         echo "<td class='options-btn'>
                                 <span class='material-symbols-outlined'>edit</span>
                                 <div class='pop-up'>
-                                    <a href='../components/edit-user.php?id={$row['user_id']}'><span class='material-symbols-outlined'>edit</span>Edit</a>
+                                    <a href='../components/edit-user.php?user_id={$row['user_id']}'><span class='material-symbols-outlined'>edit</span>Edit</a>
                                     <form action='../components/delete-user.php' method='POST' onsubmit='return confirm(\"Are you sure you want to delete this user?\");'>
                                         <input type='hidden' name='user_id' value='{$row['user_id']}'>
                                         <button type='submit' class='delete-btn'>

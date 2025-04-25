@@ -15,7 +15,6 @@ if (!$pet_id) {
     die("Pet ID not provided.");
 }
 
-// Load existing pet
 $sql = "SELECT * FROM pets WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $pet_id);
@@ -97,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['pet-name'])) {
 
 if (isset($_SESSION['popup_message'])) {
     displayPopup($_SESSION['popup_message']);
-    unset($_SESSION['popup_message']); // Clear the message from session after displaying it
+    unset($_SESSION['popup_message']);
 }
 
 $pet_images = [];
@@ -314,8 +313,7 @@ $stmt->close();
     });
 
     renderGallery();
-    </script>
-    <script>
+
     function closePopup() {
         const popup = document.querySelector(".popup-overlay");
         if (popup) {

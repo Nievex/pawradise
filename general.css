@@ -82,6 +82,7 @@ h3 {
   border-collapse: collapse;
   border-spacing: 1px;
   overflow-x: auto;
+  margin-bottom: 6rem;
 }
 
 .general-table tr,
@@ -463,4 +464,22 @@ td {
 
 .popup-error {
   background-color: #e03131;
+}
+
+/* Input Division */
+.input-division {
+  align-self: flex-start;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 1.2rem;
+  width: 100%;
+  margin: 1rem 0 3rem 0;
+}
+
+/* Text Overflow */
+.text-overflow {
+  white-space: nowrap;
+  max-width: 70px;
+  overflow-y: hidden;
+  text-overflow: ellipsis;
 }

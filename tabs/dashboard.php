@@ -20,9 +20,33 @@ while ($row = $result->fetch_assoc()) {
     $activities[] = $row;
 }
 
+$currentMonth = date('Y-m'); // Get current year and month (e.g., "2025-04")
+
+$queryPetsListed = "SELECT COUNT(*) AS total FROM pets WHERE DATE_FORMAT(created_at, '%Y-%m') = ?";
+$stmt = $conn->prepare($queryPetsListed);
+$stmt->bind_param("s", $currentMonth);
+$stmt->execute();
+$resultPetsListed = $stmt->get_result();
+$petsListed = $resultPetsListed->fetch_assoc()['total'];
+$stmt->close();
+
+$queryAdoptionCompleted = "SELECT COUNT(*) AS total FROM pets WHERE DATE_FORMAT(created_at, '%Y-%m') = ? AND adoption_status = 'completed'";
+$stmt = $conn->prepare($queryAdoptionCompleted);
+$stmt->bind_param("s", $currentMonth);
+$stmt->execute();
+$resultAdoptionCompleted = $stmt->get_result();
+$adoptionCompleted = $resultAdoptionCompleted->fetch_assoc()['total'];
+$stmt->close();
+
+$queryRegisteredUsers = "SELECT COUNT(*) AS total FROM users WHERE DATE_FORMAT(created_at, '%Y-%m') = ?";
+$stmt = $conn->prepare($queryRegisteredUsers);
+$stmt->bind_param("s", $currentMonth);
+$stmt->execute();
+$resultRegisteredUsers = $stmt->get_result();
+$registeredUsers = $resultRegisteredUsers->fetch_assoc()['total'];
+$stmt->close();
 $conn->close();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -92,7 +116,7 @@ $conn->close();
                     <div class="card">
                         <div class="top">
                             <span class="material-symbols-outlined">pets</span>
-                            <p class="number">428</p>
+                            <p class="number"><?php echo $petsListed; ?></p>
                         </div>
                         <p>Pets Listed</p>
                         <p class="month">Current month</p>
@@ -101,7 +125,7 @@ $conn->close();
                     <div class="card">
                         <div class="top">
                             <span class="material-symbols-outlined">task_alt</span>
-                            <p class="number">242</p>
+                            <p class="number"><?php echo $adoptionCompleted; ?></p>
                         </div>
                         <p>Adoption Completed</p>
                         <p class="month">Current month</p>
@@ -110,7 +134,7 @@ $conn->close();
                     <div class="card">
                         <div class="top">
                             <span class="material-symbols-outlined">description</span>
-                            <p class="number">25</p>
+                            <p class="number">25</p> <!-- Static for now -->
                         </div>
                         <p>Pending Applications</p>
                         <p class="month">Current month</p>
@@ -119,9 +143,9 @@ $conn->close();
                     <div class="card">
                         <div class="top">
                             <span class="material-symbols-outlined">person</span>
-                            <p class="number">167</p>
+                            <p class="number"><?php echo $registeredUsers; ?></p>
                         </div>
-                        <p>Registered users</p>
+                        <p>Registered Users</p>
                         <p class="month">Current month</p>
                     </div>
 
