@@ -1,12 +1,18 @@
 <?php
 include '../components/db_connect.php';
+include '../components/session.php';
 include '../components/popup.php';
 
-$query = "SELECT * FROM users"; 
-$result = mysqli_query($conn, $query);
+if (!isset($_SESSION['admin_email'])) {
+    header("Location: ../login.php");
+    exit();
+}
+
+$sql = "SELECT * FROM user_profiles"; 
+$result = $conn->query($sql);
 
 if (!$result) {
-    die("Database query failed: " . mysqli_error($conn));
+    die("Database query failed: " . $conn->error);
 }
 
 if (isset($_GET['deleted']) && $_GET['deleted'] == 1) {
@@ -15,6 +21,12 @@ if (isset($_GET['deleted']) && $_GET['deleted'] == 1) {
     displayPopup("Something went wrong. Please try again.", 'error');
 }
 
+$users_table = [];
+while ($row = $result->fetch_assoc()) {
+    $users_table[] = $row;
+}
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -83,28 +95,29 @@ if (isset($_GET['deleted']) && $_GET['deleted'] == 1) {
                         <th>CREATED</th>
                         <th></th>
                     </tr>
+
                     <?php
-                    if ($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
+                    if (count($users_table) > 0):
+                        foreach($users_table as $row):
                         $imageData = base64_encode($row['user_img']);
                         $imageSrc = 'data:image/jpeg;base64,' . $imageData;
 
                         echo "<tr>";
-                        echo "<td>{$row['id']}</td>";
-                        echo "<td><img src='{$imageSrc}' alt='User Image' width='50' /></td>";
-                        echo "<td>{$row['username']}</td>";
-                        echo "<td>{$row['fullname']}</td>";
-                        echo "<td>{$row['bio']}</td>";
-                        echo "<td>{$row['email']}</td>";
-                        echo "<td>{$row['phone']}</td>";
-                        echo "<td>{$row['address']}</td>";
-                        echo "<td>{$row['created_at']}</td>";
+                        echo "<td>".$row['user_id']."</td>";
+                        echo "<td><img src='{".$imageSrc."}' alt='User Image' width='50' /></td>";
+                        echo "<td>".$row['username']."</td>";
+                        echo "<td>".$row['fullname']."</td>";
+                        echo "<td>".$row['bio']."</td>";
+                        echo "<td>".$row['email']."</td>";
+                        echo "<td>".$row['phone']."</td>";
+                        echo "<td>".$row['address']."</td>";
+                        echo "<td>".$row['created_at']."</td>";
                         echo "<td class='options-btn'>
                                 <span class='material-symbols-outlined'>edit</span>
                                 <div class='pop-up'>
-                                    <a href='../components/edit-user.php?id={$row['id']}'><span class='material-symbols-outlined'>edit</span>Edit</a>
+                                    <a href='../components/edit-user.php?id={$row['user_id']}'><span class='material-symbols-outlined'>edit</span>Edit</a>
                                     <form action='../components/delete-user.php' method='POST' onsubmit='return confirm(\"Are you sure you want to delete this user?\");'>
-                                        <input type='hidden' name='user_id' value='{$row['id']}'>
+                                        <input type='hidden' name='user_id' value='{$row['user_id']}'>
                                         <button type='submit' class='delete-btn'>
                                             <span class='material-symbols-outlined'>delete</span>Delete
                                         </button>
@@ -112,15 +125,11 @@ if (isset($_GET['deleted']) && $_GET['deleted'] == 1) {
                                 </div>
                               </td>";
                         echo "</tr>";                        
-            }
-            } else {
-            echo "<tr>
-                <td colspan='10'>No users found.</td>
-            </tr>";
-            }
-
-            $conn->close();
-            ?>
+                    endforeach;
+                    ?>
+                    <?php else: ?>
+                    <p>No available data</p>
+                    <?php endif; ?>
                 </table>
             </div>
         </div>

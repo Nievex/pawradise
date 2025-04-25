@@ -1,11 +1,6 @@
 <?php
-session_start();
-$timeout_duration = 9000;
-
-if (!isset($_SESSION['admin_email'])) {
-    header("Location: ../login.php");
-    exit();
-}
+include '../components/db_connect.php';
+include '../components/session.php';
 
 if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
     include '../components/db_connect.php';
@@ -64,10 +59,11 @@ $result = $conn->query("SELECT * FROM staffs");
                     </p>
                 </div>
                 <div class="top-buttons">
-                    <a href="../components/add-pet.html" class="add-btn"><span
-                            class="material-symbols-outlined">add</span>Add Staff</a>
                     <a href="../components/pending-staffs.html" class="pending-btn"><span
                             class="material-symbols-outlined">schedule</span>Pending</a>
+                    <a href="../components/add-pet.html" class="add-btn"><span
+                            class="material-symbols-outlined">add</span>Add Staff</a>
+
                 </div>
             </div>
 

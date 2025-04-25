@@ -15,7 +15,7 @@
 <body>
     <?php include '../components/sidebar.php' ?>
 
-    <section class="add-pet-section" style="margin-left: 85px">
+    <section class="pet-management-section" style="margin-left: 85px">
         <div class="breadcrumbs">
             <div class="left">
                 <p>Admin > <span>ADD PET</span></p>
@@ -26,8 +26,8 @@
             </div>
         </div>
 
-        <form class="add-pet-container">
-            <div class="add-pet-top-panel">
+        <form class="pet-management-container">
+            <div class="pet-management-top-panel">
                 <div class="header">
                     <h1>Add Pet</h1>
                     <p class="subtitle">
@@ -39,8 +39,8 @@
                 </div>
             </div>
 
-            <div class="add-pet-bottom-panel">
-                <div class="add-pet-left-panel">
+            <div class="pet-management-bottom-panel">
+                <div class="pet-management-left-panel">
                     <div class="photo-gallery" id="photoGallery"></div>
                     <input type="file" id="photoInput" multiple accept="image/*" style="display: none" />
                 </div>

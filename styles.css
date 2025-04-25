@@ -264,25 +264,24 @@
 }
 
 /* Add and Edit Pet */
-.add-pet-container {
+.pet-management-container {
   padding: 2rem;
 }
 
-.add-pet-top-panel {
+.pet-management-top-panel {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 2rem;
 }
 
-.add-pet-top-panel .top-buttons {
+.pet-management-top-panel .top-buttons {
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  width: 300px;
 }
 
-.add-pet-top-panel .top-buttons .sort-input {
+.pet-management-top-panel .top-buttons .sort-input {
   appearance: none;
   border: none;
   outline: 0;
@@ -293,44 +292,44 @@
   cursor: pointer;
 }
 
-.add-pet-bottom-panel {
+.pet-management-bottom-panel {
   display: flex;
   justify-content: space-between;
 }
 
-.add-pet-bottom-panel .add-pet-left-panel {
+.pet-management-bottom-panel .pet-management-left-panel {
   padding-right: 1rem;
 }
 
-.add-pet-bottom-panel .add-pet-left-panel .photo-gallery {
+.pet-management-bottom-panel .pet-management-left-panel .photo-gallery {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
 
-.add-pet-bottom-panel .add-pet-left-panel .photo-gallery img {
+.pet-management-bottom-panel .pet-management-left-panel .photo-gallery img {
   width: 150px;
   height: 150px;
   object-fit: cover;
 }
 
-.add-pet-bottom-panel .right-panel {
+.pet-management-bottom-panel .right-panel {
   align-self: flex-start;
   flex-grow: 1;
 }
 
-.add-pet-bottom-panel .right-panel .input-division {
+.pet-management-bottom-panel .right-panel .input-division {
   align-self: flex-start;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 1.2rem;
   width: 100%;
-  margin-bottom: 3rem;
+  margin: 1rem 0 3rem 0;
 }
 
-.add-pet-bottom-panel .right-panel input[type="text"],
-.add-pet-bottom-panel .right-panel input[type="number"],
-.add-pet-bottom-panel .right-panel select {
+.pet-management-bottom-panel .right-panel input[type="text"],
+.pet-management-bottom-panel .right-panel input[type="number"],
+.pet-management-bottom-panel .right-panel select {
   padding: 10px 15px;
   background-color: #eee;
   border: none;

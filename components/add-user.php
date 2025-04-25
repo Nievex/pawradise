@@ -1,15 +1,16 @@
 <?php
 include '../components/db_connect.php';
-include 'popup.php';
+include '../components/logger.php';
+include '../components/session.php';
+include '../components/popup.php';
 
 function sanitize($data) {
     return htmlspecialchars(trim($data));
 }
 
-$success = false;
-$errors = [];
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $errors = [];
+
     $fullname = sanitize($_POST['fullname']);
     $username = sanitize($_POST['username']);
     $bio = sanitize($_POST['bio']);
@@ -29,33 +30,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Please fill in all required fields.";
     }
 
-    // Only process and display popup on success or error
     if (count($errors) === 0) {
-        $user_img = null;
+        $user_img = !empty($_FILES["photo"]["tmp_name"])
+            ? file_get_contents($_FILES["photo"]["tmp_name"])
+            : file_get_contents("../images/default.png");
 
-        if (!empty($_FILES["photo"]["tmp_name"])) {
-            $user_img = file_get_contents($_FILES["photo"]["tmp_name"]);
-        } else {
-            $user_img = file_get_contents("../images/default.png");
-        }
-        
-        $stmt = $conn->prepare("INSERT INTO users_table (fullname, username, bio, email, phone, address, user_img) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO user_profiles (fullname, username, bio, email, phone, address, user_img) VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->bind_param("sssssss", $fullname, $username, $bio, $email, $phone, $address, $user_img);
         $stmt->send_long_data(6, $user_img);
-        
+
         if ($stmt->execute()) {
-            $stmt->close();
-            $conn->close();
-            header("Location: add-user.php?success=1");
-            exit();
+            $newUserId = $stmt->insert_id;
+            $admin_id = $_SESSION['admin_id'];
+            log_action($conn, $admin_id, "Added new user", "user", $newUserId, "Username: $username");
+            displayPopup("User added successfully.");
         } else {
-            $errors[] = "Database error: " . $stmt->error;
+            displayPopup("Database error: " . $stmt->error, 'error');
         }
+
         $stmt->close();
         $conn->close();
+    } else {
+        foreach ($errors as $error) {
+            displayPopup("$error", 'error');
+        }
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -73,13 +76,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <body>
     <?php include '../components/sidebar.php' ?>
-    <?php 
-    if ($success = true) {
-        displayPopup("User added successfully.");
-    } else {
-        displayPopup("Error adding user", type: 'error');
-    }
-    ?>
 
     <section class="user-mgmt-section" style="margin-left: 85px">
         <div class="breadcrumbs">

@@ -1,31 +1,28 @@
 <?php
-session_start();
-
-$timeout_duration = 9000;
-
-if (!isset($_SESSION['admin_email'])) {
+include '../components/session.php';
+if (!isset($_SESSION['admin_id'])) {
     header("Location: ../login.php");
     exit();
 }
 
-if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
-    // Remove from DB
-    include '../components/db_connect.php';
-    $email = $_SESSION['admin_email'];
-    $stmt = $conn->prepare("DELETE FROM admin_sessions WHERE admin_email = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->close();
-
-    // Destroy session
-    session_unset();
-    session_destroy();
-    header("Location: ../login.php?timeout=1");
-    exit();
+$sql = "SELECT logs.*, admins.name AS admin_name
+        FROM logs
+        LEFT JOIN admins ON logs.admin_id = admins.id
+        ORDER BY created_at DESC
+        LIMIT 20";
+$result = $conn->query($sql);
+if (!$result) {
+    die("Error in query: " . $conn->error);
 }
 
-$_SESSION['LAST_ACTIVITY'] = time();
+$activities = [];
+while ($row = $result->fetch_assoc()) {
+    $activities[] = $row;
+}
+
+$conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -59,87 +56,34 @@ $_SESSION['LAST_ACTIVITY'] = time();
         <div class="dashboard-analytics-container-top">
             <div class="dashboard-header">
                 <div class="admin-greetings">
-                    <p class="current-date">March 29, 2025 Saturday</p>
-                    <h1>Good morning, <span>Admin</span>!</h1>
+                    <p class="current-date"><?php echo date("M d, Y l")?></p>
+                    <h1>Good morning, <span><?= htmlspecialchars($_SESSION['admin_name']) ?></span>!</h1>
                 </div>
 
                 <div class="recent-activities">
                     <h3>Recent Activities</h3>
                     <p style="padding-bottom: 1rem;">Changes made by the admins</p>
-
                     <div class="activities-container">
-                        <div class="activity">
-                            <div class="activity-name">
-                                <span class="material-symbols-outlined activity-icon">chevron_forward</span>
-                                <p>New pets added</p>
-                            </div>
+                        <?php if (count($activities) > 0): ?>
+                        <ul>
+                            <?php foreach ($activities as $row): ?>
+                            <li class="activity">
+                                <div class="activity-name">
+                                    <span class="material-symbols-outlined activity-icon">chevron_forward</span>
+                                    <p><?= htmlspecialchars(trim($row['admin_action'])) ?: 'No action available' ?></p>
+                                </div>
+                                <p class="activity-time"><?= date("M d, Y | h:i a", strtotime($row['created_at'])) ?>
+                                </p>
+                            </li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <?php else: ?>
+                        <p>No recent activities to display.</p>
+                        <?php endif; ?>
 
-                            <p>March 29, 2025</p>
-                        </div>
-
-                        <div class="activity">
-                            <div class="activity-name">
-                                <span class="material-symbols-outlined activity-icon">chevron_forward</span>
-                                <p>Admin changes</p>
-                            </div>
-
-                            <p>March 01, 2025</p>
-                        </div>
-
-                        <div class="activity">
-                            <div class="activity-name">
-                                <span class="material-symbols-outlined activity-icon">chevron_forward</span>
-                                <p>Pet adopted</p>
-                            </div>
-
-                            <p>February 14, 2025</p>
-                        </div>
-
-                        <div class="activity">
-                            <div class="activity-name">
-                                <span class="material-symbols-outlined activity-icon">chevron_forward</span>
-                                <p>New pets added</p>
-                            </div>
-
-                            <p>February 6, 2025</p>
-                        </div>
-
-                        <div class="activity">
-                            <div class="activity-name">
-                                <span class="material-symbols-outlined activity-icon">chevron_forward</span>
-                                <p>New pets added</p>
-                            </div>
-
-                            <p>February 6, 2025</p>
-                        </div>
-
-                        <div class="activity">
-                            <div class="activity-name">
-                                <span class="material-symbols-outlined activity-icon">chevron_forward</span>
-                                <p>New pets added</p>
-                            </div>
-
-                            <p>February 6, 2025</p>
-                        </div>
-
-                        <div class="activity">
-                            <div class="activity-name">
-                                <span class="material-symbols-outlined activity-icon">chevron_forward</span>
-                                <p>New pets added</p>
-                            </div>
-
-                            <p>February 6, 2025</p>
-                        </div>
-
-                        <div class="activity">
-                            <div class="activity-name">
-                                <span class="material-symbols-outlined activity-icon">chevron_forward</span>
-                                <p>New pets added</p>
-                            </div>
-
-                            <p>February 6, 2025</p>
-                        </div>
                     </div>
+
+
                 </div>
             </div>
 
@@ -186,7 +130,7 @@ $_SESSION['LAST_ACTIVITY'] = time();
             </div>
         </div>
         </div>
-
+        <!-- 
         <div class="dashboard-analytics-container-bottom">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis quia quibusdam magnam veritatis officiis id
             nisi assumenda laboriosam aperiam, ullam, sapiente magni tenetur, asperiores ducimus sunt praesentium
@@ -195,7 +139,7 @@ $_SESSION['LAST_ACTIVITY'] = time();
 
         <div>
             <canvas id="myChart" width="400" height="200"></canvas>
-        </div>
+        </div> -->
     </section>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="../script.js"></script>
