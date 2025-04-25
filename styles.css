@@ -228,17 +228,6 @@
   width: 320px;
 }
 
-.management-top-panel .top-buttons .sort-input {
-  appearance: none;
-  border: none;
-  outline: 0;
-  font: inherit;
-  width: 10rem;
-  padding: 1rem 1.6rem;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
 .search-input {
   display: flex;
   align-items: center;
@@ -361,17 +350,6 @@
   align-items: center;
   gap: 0.8rem;
   width: 300px;
-}
-
-.user-mgmt-top-panel .top-buttons .sort-input {
-  appearance: none;
-  border: none;
-  outline: 0;
-  font: inherit;
-  width: 10rem;
-  padding: 1rem 1.6rem;
-  border-radius: 10px;
-  cursor: pointer;
 }
 
 .user-mgmt-bottom-panel {

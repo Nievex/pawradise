@@ -66,12 +66,13 @@ $conn->close();
                 </div>
                 <div class="top-buttons">
                     <select name="sort" id="" class="sort-input">
-                        <option value="sort" disabled selected>Sort</option>
+                        <option value="sort" disabled selected>Sort
+                        </option>
                         <option value="alphabetical">Alphabetical</option>
                         <option value="newest">Newest</option>
                     </select>
                     <a href="../components/add-pet.php" class="add-btn"><span
-                            class="material-symbols-outlined">add</span>Add Pet</a>
+                            class="material-symbols-outlined">add</span>Add Entry</a>
                 </div>
             </div>
 

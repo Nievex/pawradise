@@ -48,7 +48,7 @@ $profileImgSrc = $adminImage ? 'data:image/jpeg;base64,' . base64_encode($adminI
                 </span>Staffs</a>
         </li>
         <li>
-            <a href="../tabs/staff-accounts-management.php"><span class="material-symbols-outlined"> person_4
+            <a href="../tabs/staff-admins-management.php"><span class="material-symbols-outlined"> person_4
                 </span>Staff Admins</a>
         </li>
         <li>

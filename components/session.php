@@ -9,14 +9,14 @@ include 'db_connect.php';
 define('SESSION_TIMEOUT', 1800); // 30 minutes
 
 if (!isset($_SESSION['admin_email'])) {
-    header("Location: ./login.php");
+    header("Location: ../login.php");
     exit();
 }
 
 if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY']) > SESSION_TIMEOUT) {
     session_unset();
     session_destroy();
-    header("Location: .../login.php?timeout=1");
+    header("Location: ../login.php");
     exit();
 }
 $_SESSION['LAST_ACTIVITY'] = time();
@@ -39,7 +39,7 @@ if ($row = $result->fetch_assoc()) {
 } else {
     session_unset();
     session_destroy();
-    header("Location: ./login.php");
+    header("Location: ../login.php");
     exit();
 }
 

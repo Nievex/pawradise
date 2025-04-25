@@ -1,3 +1,33 @@
+<?php
+include '../components/db_connect.php';
+include '../components/session.php';
+include '../components/popup.php';
+
+if (!isset($_SESSION['admin_email'])) {
+    header("Location: ../login.php");
+    exit();
+}
+
+$result = $conn->query("SELECT * FROM staff_admins");
+
+if (!$result) {
+    die("Database query failed: " . $conn->error);
+}
+
+if (isset($_GET['deleted']) && $_GET['deleted'] == 1) {
+    displayPopup("Staff deleted successfully.");
+} elseif (isset($_GET['error']) && $_GET['error'] == 1) {
+    displayPopup("Something went wrong. Please try again.", 'error');
+}
+
+$staffs_table = [];
+while ($row = $result->fetch_assoc()) {
+    $staffs_table[] = $row;
+}
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -40,7 +70,8 @@
                         <option value="alphabetical">Alphabetical</option>
                         <option value="newest">Newest</option>
                     </select>
-                    <a href="../components/add-pet.html" class="add-btn">Add User</a>
+                    <a href="../components/add-pet.html" class="add-btn"><span
+                            class="material-symbols-outlined">add</span>Add Entry</a>
                 </div>
             </div>
 
@@ -54,104 +85,47 @@
                     <tr>
                         <th>ID</th>
                         <th>IMAGE</th>
-                        <th>USERNAME</th>
-                        <th>NAME</th>
-                        <th>BIO</th>
+                        <th>FULLNAME</th>
                         <th>EMAIL</th>
-                        <th>PASSWORD</th>
                         <th>PHONE</th>
-                        <th>LOCATION</th>
+                        <th>ADDRESS</th>
+                        <th>SHELTER</th>
                         <th>CREATED</th>
                         <th></th>
                     </tr>
 
-                    <tr>
-                        <td>1</td>
-                        <td>
-                            <img src="../images/user1.jpg" alt="User Image" width="40" />
-                        </td>
-                        <td>bruno_doggo</td>
-                        <td>Bruno</td>
-                        <td>Playful dog ready for adoption</td>
-                        <td>bruno@example.com</td>
-                        <td>••••••••</td>
-                        <td>+1 234 567 8901</td>
-                        <td>Los Angeles, CA</td>
-                        <td>2024-12-01</td>
-                        <td class="options-btn">
-                            <span class="material-symbols-outlined">edit</span>
-                            <div class="pop-up">
-                                <a href="#"><span class="material-symbols-outlined">edit</span>Edit</a>
-                                <a href="#"><span class="material-symbols-outlined">delete</span>Delete</a>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>2</td>
-                        <td>
-                            <img src="../images/user2.jpg" alt="User Image" width="40" />
-                        </td>
-                        <td>catlover22</td>
-                        <td>Luna</td>
-                        <td>Sweet cat rescued from the street</td>
-                        <td>luna@example.com</td>
-                        <td>••••••••</td>
-                        <td>+1 555 888 1122</td>
-                        <td>New York, NY</td>
-                        <td>2024-11-10</td>
-                        <td class="options-btn">
-                            <span class="material-symbols-outlined">edit</span>
-                            <div class="pop-up">
-                                <a href="#"><span class="material-symbols-outlined">edit</span>Edit</a>
-                                <a href="#"><span class="material-symbols-outlined">delete</span>Delete</a>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>3</td>
-                        <td>
-                            <img src="../images/user3.jpg" alt="User Image" width="40" />
-                        </td>
-                        <td>rabbit_ron</td>
-                        <td>Ronnie</td>
-                        <td>Friendly rabbit looking for a home</td>
-                        <td>ronnie@example.com</td>
-                        <td>••••••••</td>
-                        <td>+1 789 456 3210</td>
-                        <td>Chicago, IL</td>
-                        <td>2024-10-25</td>
-                        <td class="options-btn">
-                            <span class="material-symbols-outlined">edit</span>
-                            <div class="pop-up">
-                                <a href="#"><span class="material-symbols-outlined">edit</span>Edit</a>
-                                <a href="#"><span class="material-symbols-outlined">delete</span>Delete</a>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>4</td>
-                        <td>
-                            <img src="../images/user4.jpg" alt="User Image" width="40" />
-                        </td>
-                        <td>parrot_pete</td>
-                        <td>Pete</td>
-                        <td>Colorful parrot that loves to talk</td>
-                        <td>pete@example.com</td>
-                        <td>••••••••</td>
-                        <td>+1 222 333 4444</td>
-                        <td>Miami, FL</td>
-                        <td>2024-09-18</td>
-                        <td class="options-btn">
-                            <span class="material-symbols-outlined">edit</span>
-                            <div class="pop-up">
-                                <a href="#"><span class="material-symbols-outlined">edit</span>Edit</a>
-                                <a href="#"><span class="material-symbols-outlined">delete</span>Delete</a>
-                            </div>
-                        </td>
-                    </tr>
+                    <?php
+                    if (count($staffs_table) > 0):
+                        foreach($staffs_table as $row):
+                        $imageSrc = !empty($row['staff_admin_img']) ? 'data:image/jpeg;base64,' . base64_encode($row['user_img']) : './images/default.png';
+                        
+                        echo "<tr>";
+                        echo "<td>".$row['id']."</td>";
+                        echo "<td><img src='{$imageSrc}' alt='User Image' width='50' /></td>";
+                        echo "<td>".$row['fullname']."</td>";
+                        echo "<td>".$row['email']."</td>";
+                        echo "<td>".$row['phone']."</td>";
+                        echo "<td>".$row['shelter']."</td>";
+                        echo "<td class='text-overflow'>".$row['address']."</td>";
+                        echo "<td>".$row['created_at']."</td>";
+                        echo "<td class='options-btn'>
+                                <span class='material-symbols-outlined'>edit</span>
+                                <div class='pop-up'>
+                                    <a href='../components/edit-staff.php?user_id={$row['id']}'><span class='material-symbols-outlined'>edit</span>Edit</a>
+                                    <form action='../components/delete-staff.php' method='POST' onsubmit='return confirm(\"Are you sure you want to delete this user?\");'>
+                                        <input type='hidden' name='user_id' value='{$row['id']}'>
+                                        <button type='submit' class='delete-btn'>
+                                            <span class='material-symbols-outlined'>delete</span>Delete
+                                        </button>
+                                    </form>
+                                </div>
+                              </td>";
+                        echo "</tr>";                        
+                    endforeach;
+                    ?>
+                    <?php else: ?>
+                    <p>No available data</p>
+                    <?php endif; ?>
                 </table>
             </div>
         </div>

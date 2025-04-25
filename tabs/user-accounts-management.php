@@ -67,12 +67,12 @@ $conn->close();
                 </div>
                 <div class="top-buttons">
                     <select name="sort" id="" class="sort-input">
-                        <option value="sort" disabled selected>Sort</option>
+                        <option value="" disabled selected>Sort</option>
                         <option value="alphabetical">Alphabetical</option>
                         <option value="newest">Newest</option>
                     </select>
                     <a href="../components/add-user.php" class="add-btn"><span
-                            class="material-symbols-outlined">add</span>Add User</a>
+                            class="material-symbols-outlined">add</span>Add Entry</a>
                 </div>
             </div>
 
@@ -109,7 +109,7 @@ $conn->close();
                         echo "<td>".$row['username']."</td>";
                         echo "<td>".$row['fullname']."</td>";
                         echo "<td>".$row['bio']."</td>";
-                        echo "<td>".$row['email']."</td>";
+                        echo "<td class='text-overflow'>".$row['email']."</td>";
                         echo "<td>".$row['phone']."</td>";
                         echo "<td class='text-overflow'>".$row['address']."</td>";
                         echo "<td>".$row['gender']."</td>";

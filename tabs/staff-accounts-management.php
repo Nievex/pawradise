@@ -68,7 +68,7 @@ $conn->close();
                     <a href="../components/pending-staffs.html" class="pending-btn"><span
                             class="material-symbols-outlined">schedule</span>Pending</a>
                     <a href="../components/add-staff.php" class="add-btn"><span
-                            class="material-symbols-outlined">add</span>Add Staff</a>
+                            class="material-symbols-outlined">add</span>Add Entry</a>
 
                 </div>
             </div>
@@ -83,7 +83,7 @@ $conn->close();
                     <tr>
                         <th>ID</th>
                         <th>IMAGE</th>
-                        <th>NAME</th>
+                        <th>FULLNAME</th>
                         <th>EMAIL</th>
                         <th>PHONE</th>
                         <th>ROLE</th>
@@ -96,7 +96,7 @@ $conn->close();
                     <?php
                     if (count($staffs_table) > 0):
                         foreach($staffs_table as $row):
-                        $imageSrc = !empty($row['user_img']) ? 'data:image/jpeg;base64,' . base64_encode($row['user_img']) : './images/default.png';
+                        $imageSrc = !empty($row['staff_img']) ? 'data:image/jpeg;base64,' . base64_encode($row['user_img']) : './images/default.png';
                         
                         echo "<tr>";
                         echo "<td>".$row['id']."</td>";
